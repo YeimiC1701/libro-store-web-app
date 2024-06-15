@@ -76,9 +76,13 @@ WSGI_APPLICATION = 'projAds.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+       'ENGINE': 'django.db.backends.postgresql',
+       'NAME': 'libStore',
+       'USER': 'postgres',
+       'PASSWORD': 'admin',
+       'HOST': 'localhost',
+       'PORT': '5432',
+   }
 }
 
 
@@ -118,12 +122,12 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-# Ruta donde Django buscará los archivos estáticos en el sistema de archivos
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
+# # Ruta donde Django buscará los archivos estáticos en el sistema de archivos
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static'),
+# ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
