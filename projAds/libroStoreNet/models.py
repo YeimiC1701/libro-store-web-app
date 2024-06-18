@@ -9,12 +9,10 @@ class Libro(models.Model):
     tituloLibro = models.CharField(max_length = 100, null = False, blank = False)
     isbnLibro = models.CharField(max_length = 13, null = False, blank = False)
     resumenLibro = models.CharField(max_length = 500, null = True, blank = True)
-    precioLibro = models.DecimalField(decimal_places = 2, null = False)
+    precioLibro = models.DecimalField(max_digits = 7,decimal_places = 2, null = False)
     stockLibro = models.IntegerField(null = False, blank = False, default = 0)
-    descuento = models.DecimalField(decimal_places = 2, defaul = 0, null = True, blank = True)
-
-    """Queda pendiente su integración"""
-    # portadalibro = models.ImageField(null = True, blank = True, upload_to='images/')
+    descuento = models.DecimalField(max_digits = 3,decimal_places = 2, default = 0, null = True, blank = True)
+    portadalibro = models.ImageField(null = True, blank = True, upload_to='images/') 
 
     def __str__(self):
         return self.tituloLibro
@@ -45,6 +43,7 @@ class Autor(models.Model):
         # Nombre personalizado para la BD
         db_table = 'autor'
         ordering = ['autor']
+
 
 """
 Modelo para editoriales de los libros
@@ -91,8 +90,8 @@ Modelo para transacciones
 """
 class Transaccion(models.Model):
     tiempoTransaccion = models.DateTimeField(auto_now_add = True, unique = True)
-    precioTransaccion = models.DecimalField(decimal_places = 2, null = False)
-    totalTransaccion = models.DecimalField(decimal_places = 2, null = False)
+    precioTransaccion = models.DecimalField(max_digits = 7,decimal_places = 2, null = False)
+    totalTransaccion = models.DecimalField(max_digits = 10,decimal_places = 2, null = False)
     piezasTransaccion = models.PositiveIntegerField(null = False)
 
     def __str__(self):
@@ -112,7 +111,7 @@ Modelo para relacion intermedia entre transacciones y libros transaccionados
 """
 class TransaccionInterLibro:
     idTransaccion = models.ForeignKey(Transaccion, on_delete = models.CASCADE)
-    idLibro = models.ForeignKey(TipoTransaccion, on_delete = models.CASCADE)
+    idLibro = models.ForeignKey(Libro, on_delete = models.CASCADE)
 
     def __str__(self):
         return f"Transaccion: {self.idTransaccion} - Libro: {self.idLibro}"
@@ -181,8 +180,7 @@ class Empleado(models.Model):
     estatusEmpleado = models.CharField(max_length = 1, null = False)
 
     def __str__(self):
-        return f"{self.apellidoPaternoEmpleado}, {self.apellidoMaternoEmpleado},
-            {self.nombresEmpleado}"
+        return f"{self.apellidoPaternoEmpleado} {self.apellidoMaternoEmpleado} {self.nombresEmpleado}"
     
     # Personalización para el panel de administración de Django
     class Meta:
@@ -272,7 +270,7 @@ class EmpleadoInterTipoEmpleado(models.Model):
     idTipoEmpleado = models.ForeignKey(TipoEmpleado, on_delete = models.CASCADE)
     
     def __str__(self):
-        return f"Empleado: {self.idEmpleado} - Corte: {self.idTipoEmpleado}"
+        return f"Empleado: {self.idEmpleado} - Tipo: {self.idTipoEmpleado}"
 
     # Personalización para el panel de administración de Django
     class Meta:
@@ -289,8 +287,8 @@ class EmpleadoInterTipoEmpleado(models.Model):
 Modelo para cliente de la pagina web
 """
 class Cliente(models.Model):
-    nombresCliente = models.CharField(max_length = 50, null = False)
-    apellidoPaternoCliente = models.CharField(max_length = 50, null = False)
+    nombresCliente = models.CharField(max_length = 50, null = False, blank = False)
+    apellidoPaternoCliente = models.CharField(max_length = 50, null = False, blank = False)
     apellidoMaternoCliente = models.CharField(max_length = 50, blank = True, null = True)
     emailCliente = models.CharField(max_length = 9, null = False)
     contraseniaCliente = models.CharField(max_length = 128, null = False)
@@ -298,8 +296,7 @@ class Cliente(models.Model):
     esVerificadoCliente = models.BooleanField(null = False, default = False)
 
     def __str__(self):
-        return f"{self.apellidoPaternoCliente}, {self.apellidoMaternoCliente},
-            {self.nombresCliente}"
+        return f"{self.apellidoPaternoCliente} {self.apellidoMaternoCliente} {self.nombresCliente}"
     
     # Personalización para el panel de administración de Django
     class Meta:
@@ -337,12 +334,11 @@ Modelo para el domicilio de un cliente
 class Domicilio(models.Model):
     calleDomicilio = models.CharField(max_length = 50, null = False)
     numeroExteriorDomicilio = models.CharField(max_length = 10, null = False, default = "s/n")
-    codigoPostalDomicilio = models.CharField(max_length = 5, blank = True, null = True)
+    codigoPostalDomicilio = models.CharField(max_length = 5, blank = False, null = False)
     coloniaDomicilio = models.CharField(max_length = 50, null = False)
 
     def __str__(self):
-        return f"{self.calleDomicilio}, Num: {self.numeroExteriorDomicilio}, 
-                {self.codigoPostalDomicilio}"
+        return f"{self.calleDomicilio}, Num: {self.numeroExteriorDomicilio}, {self.codigoPostalDomicilio}"
     
     # Personalización para el panel de administración de Django
     class Meta:
@@ -350,7 +346,7 @@ class Domicilio(models.Model):
         verbose_name_plural = 'Domicilios'
         # Nombre personalizado para la BD
         db_table = 'domicilio'
-        ordering = ['cogioPostalDomicilio']
+        ordering = ['codigoPostalDomicilio']
 
 
 """
@@ -375,16 +371,32 @@ class ClienteInterDomicilio(models.Model):
 
 
 """
-Modelo para diccionario de direcciones
+Modelo para direcciones
 """
-# pendiente de implementar
+class Direccion(models.Model):
+    codigoPostal = models.CharField(max_length = 5, null = False)
+    asentamiento = models.CharField(max_length = 50, null = False)
+    mnpio = models.CharField(max_length = 50, null = False)
+    estado = models.CharField(max_length = 50, null = False)
+    # Identificador de asentamiento (un codigo postal puede tener varios asentamientos)
+    idAsentaCodigoPostal = models.CharField(max_length = 5, null = False)
+
+    def __str__(self):
+        return f"{self.codigoPostal} {self.asentamiento}, {self.mnpio}, {self.estado}"
+    
+    class Meta:
+        verbose_name = 'Direccion'
+        verbose_name_plural = 'Direcciones'
+        # Nombre personalizado para la BD
+        db_table = 'direccion'
+        ordering = ['codigoPostal', 'asentamiento']
 
 
 """
-Modelo para relacion intermedia entre domicilio y diccionario de direcciones
+Modelo para relacion intermedia entre domicilio y direcciones
 """
-class DiccionarioDireccionesInterDomicilio(models.Model):
-    idDireccion = models.ForeignKey('Direccion', on_delete = models.CASCADE)
+class DireccionInterDomicilio(models.Model):
+    idDireccion = models.ForeignKey(Direccion, on_delete = models.CASCADE)
     idDomicilio = models.ForeignKey(Domicilio, on_delete = models.CASCADE)
     
     def __str__(self):
@@ -393,11 +405,11 @@ class DiccionarioDireccionesInterDomicilio(models.Model):
     # Personalización para el panel de administración de Django
     class Meta:
         # Nombre personalizado para la BD
-        db_table = 'diccionarioDirecciones_domicilio'
+        db_table = 'Direccion_domicilio'
         # Se asegura que la combinacion de las FKs sea unica
         constraints = [
             models.UniqueConstraint(fields = ['idDomicilio', 'idDireccion'], 
-                                    name = 'unique_diccionarioDirecciones_domicilio')
+                                    name = 'unique_Direccion_domicilio')
         ]
 
 
