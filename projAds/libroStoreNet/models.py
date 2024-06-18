@@ -323,7 +323,7 @@ class ClienteInterTransaccion(models.Model):
         db_table = 'cliente_transaccion'
         # Se asegura que la combinacion de las FKs sea unica
         constraints = [
-            models.UniqueConstraint(fields = ['idEmpleado', 'idCliente'], 
+            models.UniqueConstraint(fields = ['idTransaccion', 'idCliente'], 
                                     name = 'unique_cliente_transaccion')
         ]
 
