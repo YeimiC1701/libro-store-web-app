@@ -1,0 +1,137 @@
+<style>
+    body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: left;
+            padding: 10px 20px;
+            background-color: #fff;
+            border-bottom: 1px solid #ccc;
+            margin-top: 2vh;
+            padding-bottom: 3vh;
+        }
+
+        .logo {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-right: 20px;
+            padding-right: 3vw !important;
+            padding-left: 1vw;
+        }
+
+        .logo img {
+            height: 50px;
+            top: -1vh;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        .net-text {
+            color: red;
+        }
+
+
+        .nav {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+            font-size: 20px;
+            padding: 0px 3vw 0px 2vw;
+            margin: 0;
+        }
+
+        .search-bar.mx-auto{
+            margin-left: 5vw !important;
+            margin-right: 6vw !important;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            width: 40%;
+            box-shadow: 0px 4px 2px -2px gray;
+            padding: 5px;
+            left:50%;
+            margin-left: 5vw;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 5px;
+            border: 1px none #ccc;
+            border-radius: 3px;
+            opacity: 0.7;
+        }
+
+        .search-bar input::placeholder {
+            opacity: 0.7;
+        }
+
+        .search-bar button {
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .user-actions {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-left: 4vw;
+        }
+
+        .action-link {
+            text-decoration: none;
+            color: black;
+            display: flex;
+            align-items: center;
+            padding: 0 2vw;
+        }
+
+        .action-link i {
+            margin-right: 5px;
+            font-size: 1.8em;
+        }
+
+        .user-actions-text{
+            color: rgba(0, 0, 0, 0.5);
+            text-decoration: none !important;
+        }
+
+</style>
+
+
+<header class="header">
+    <div class="d-flex align-items-center">
+        <div class="logo">
+            <img src="logo.png" alt="Libro Net Store Logo">
+            <span class="logo-text">Libro <span class="net-text">Net</span> Store</span>
+        </div>
+        <nav class="nav">
+            <a href="#" class="nav-link">Catálogo</a>
+        </nav>
+    </div>
+    <div class="search-bar mx-auto">
+        <input type="text" placeholder="¿Qué estás buscando?">
+        <button><i class="fa-solid fa-magnifying-glass"></i></button>
+    </div>
+    <div class="user-actions">
+        <a href="#" class="action-link"><i class="fa-solid fa-user"></i> <div class="user-actions-text">Ingresar</div> </a>
+        <a href="#" class="action-link"><i class="fa-solid fa-bag-shopping"></i><div class="user-actions-text">Bolsa</div> </a>
+    </div>
+</header>
