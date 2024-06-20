@@ -3,6 +3,21 @@ from django.db import models
 # MOELOS
 
 """
+Modelo para categorias de un libro
+"""
+class Categoria(models.Model):
+    categoria = models.CharField(max_length = 20, null = False, blank = False)
+
+    def __str__(self):
+        return self.categoria
+
+    class Meta:
+        verbose_name = 'Categoria'
+        verbose_name_plural = 'Categorias'
+        db_table = 'categoria'
+        ordering = ['categoria']
+
+"""
 Modelo para un libro
 """
 class Libro(models.Model):
@@ -16,6 +31,8 @@ class Libro(models.Model):
     portadalibro = models.ImageField(null = True, blank = True, upload_to='images/')
     editorial = models.ForeignKey('Editorial', on_delete = models.CASCADE, 
                                   related_name = 'librosPublicados', default = 0)
+    categoria = models.ForeignKey(Categoria, on_delete = models.DO_NOTHING, null = True, 
+                                  blank = True)
 
     def __str__(self):
         return self.tituloLibro
@@ -72,9 +89,6 @@ class TransaccionInterLibro(models.Model):
     precio = models.DecimalField(max_digits = 7, decimal_places = 2, null = False)
     piezas = models.PositiveIntegerField(null = False, blank = False)
 
-    def __str__(self):
-        return f"Transaccion: {self.idTransaccion} - Libro: {self.idLibro}"
-
     # # Personalización para el panel de administración de Django
     class Meta:
         # Nombre personalizado para la BD
@@ -95,8 +109,9 @@ class Transaccion(models.Model):
     libros = models.ManyToManyField(Libro, through = TransaccionInterLibro)
     tipoTransaccion = models.ForeignKey('TipoTransaccion', on_delete = models.DO_NOTHING, 
                                         default = 0)
-    empleado = models.ForeignKey('Empleado', on_delete = models.DO_NOTHING, default = 0)
-    cliente = models.ForeignKey('Cliente', on_delete = models.DO_NOTHING, default = 0) 
+    empleado = models.ForeignKey('Empleado', on_delete = models.DO_NOTHING, null = True, 
+                                 blank = True)
+    cliente = models.ForeignKey('Cliente', on_delete = models.DO_NOTHING, null = True, blank = True)
 
     def __str__(self):
         return f"Fecha y hora: {self.tiempoTransaccion} - Total: {self.totalTransaccion}"
@@ -194,7 +209,7 @@ class Cliente(models.Model):
     nombresCliente = models.CharField(max_length = 50, null = False, blank = False)
     apellidoPaternoCliente = models.CharField(max_length = 50, null = False, blank = False)
     apellidoMaternoCliente = models.CharField(max_length = 50, blank = True, null = True)
-    emailCliente = models.CharField(max_length = 9, null = False)
+    emailCliente = models.CharField(max_length = 30, null = False)
     contraseniaCliente = models.CharField(max_length = 128, null = False)
     estatusCliente = models.CharField(max_length = 1, null = False)
     esVerificadoCliente = models.BooleanField(null = False, default = False)
