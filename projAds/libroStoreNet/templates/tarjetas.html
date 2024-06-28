@@ -1,0 +1,40 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'css/_tarjetas.css' %}">
+<div class="doble-card">
+  <div class="card" id="card1">
+    <img class="image" src="{% static 'img/1.jpg' %}" alt="Image 1" />
+    <div class="content">
+      <a href="#">
+        <span class="title">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit.
+        </span>
+      </a>
+
+      <a class="action" href="#">
+        Descubrelo
+        <span aria-hidden="true">
+          →
+        </span>
+      </a>
+    </div>
+  </div>
+  
+  <div class="card" id="card2">
+    <img class="image" src="{% static 'img/20.jpg' %}" alt="Image 1" />
+    <div class="content">
+      <a href="#">
+        <span class="title">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit.
+        </span>
+      </a>
+
+      <a class="action" href="#">
+        Descubrelo
+        <span aria-hidden="true">
+          →
+        </span>
+      </a>
+    </div>
+  </div>
+</div>
