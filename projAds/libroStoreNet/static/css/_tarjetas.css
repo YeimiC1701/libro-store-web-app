@@ -1,0 +1,78 @@
+.doble-card {
+    margin-top: 5rem;
+    width: 95%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5rem;
+    justify-content: center;
+}
+
+.card {
+    width: 50%;
+    min-width: 300px;
+    max-width: 410px;
+    max-height: 250px;
+    border-radius: 0.1rem;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    border: 1px solid transparent;
+    display: flex;
+    flex-direction: row;
+}
+
+#card1 {
+    background-color: #FF8882;
+}
+
+#card2 {
+    background-color: #D3D3D3;
+}
+
+.card a {
+    text-decoration: none;
+}
+
+.content {
+    padding: 1.1rem;
+    display: inline-block;
+    align-content: space-between;
+}
+
+.image {
+    object-fit: cover;
+    /* width: 85%; */
+    margin: 15px;
+    /* height: 150px; */
+    height: fit-content;
+}
+
+.title {
+    color: #111827;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.action {
+    display: inline-flex;
+    margin-top: 1rem;
+    color: #000;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+    align-items: center;
+    gap: 0.25rem;
+    background-color:transparent;
+    padding: 4px 8px;
+    border: black 1px solid;
+    border-radius: 2px;
+}
+
+.action span {
+    transition: .3s ease;
+}
+
+.action:hover span {
+    transform: translateX(4px);
+}
+

@@ -28,7 +28,8 @@ class Libro(models.Model):
     stockLibro = models.IntegerField(null = False, blank = False, default = 0)
     descuento = models.DecimalField(max_digits = 3,decimal_places = 2, default = 0, null = True, 
                                     blank = True)
-    portadalibro = models.ImageField(null = True, blank = True, upload_to='images/')
+    portadaLibro = models.ImageField(null = True, blank = True, upload_to='img/', 
+                                     default = 'img/default.jpg')
     editorial = models.ForeignKey('Editorial', on_delete = models.CASCADE, 
                                   related_name = 'librosPublicados', default = 0)
     categoria = models.ForeignKey(Categoria, on_delete = models.DO_NOTHING, null = True, 
