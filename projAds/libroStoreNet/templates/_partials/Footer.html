@@ -1,8 +1,5 @@
 <style>
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-    }
+   
 
     .footer {
         background-color: #f7c7c7;
@@ -11,6 +8,8 @@
         justify-content: space-evenly;
         align-items: center;
         color: #000;
+        margin-top: 0;
+        padding-bottom: 5px;
     }
 
     .footer .logo {
@@ -76,7 +75,7 @@
 </style>
 
 {% load static %}
-<footer class="footer" class="mt-auto">
+<footer class="footer" class="mt-auto" class="navbar fixed-bottom">
     <div class="logo">
         <img src="{% static 'img/logo.png' %}" alt="Libro Net Store Logo">
         <span class="logo-text">Libro <span class="net-text">Net</span> Store</span>
