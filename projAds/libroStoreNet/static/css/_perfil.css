@@ -1,0 +1,38 @@
+h1 {
+    color: var(--colorPrimario);
+}
+
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+.seccion {
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+}
+
+.seccion-grid {
+    display: grid; 
+    align-items: center; 
+    grid-template-columns: 1fr 5fr;
+    height: 110px;
+}
+
+.seccion-doble {
+    margin-top: 60px;
+}
+
+.seccion-grid .fa-solid, .seccion-grid .fa-regular {
+    width: 60px;
+    margin: auto;
+    color: var(--colorPrimario);
+    font-size: 60px;
+}
+
+.texto {
+    margin-left: 15px;
+}
+
+        
