@@ -1,0 +1,238 @@
+{% extends 'base.html' %}
+
+{% block title %}Tu bolsa{% endblock %}
+{% load static %}
+
+{% block content %}
+
+<style>
+    .cart-container {
+        margin-top: 30px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .cart-title {
+        color: #d9534f;
+    }
+
+    .cart-table-container {
+        width: 75%;
+    }
+
+    .cart-table {
+        width: 100%;
+        margin-bottom: 20px;
+        border-collapse: collapse;
+    }
+
+    .cart-table th, .cart-table td {
+        vertical-align: middle;
+        border: none;
+    }
+
+    .cart-description-row {
+        border-bottom: 2px solid #ccc;
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+
+    .cart-item-row {
+        display: flex;
+        align-items: center;
+    }
+
+    .cart-item-image {
+        width: 100px;
+        height: 140px;
+        margin-right: 10px;
+    }
+
+    .cart-item-details h4 {
+        margin: 0;
+        font-size: 1.1em;
+    }
+
+    .cart-item-details p {
+        margin: 0;
+    }
+
+    .cart-summary-container {
+        width: 25%;
+        position: relative;
+    }
+
+    .cart-summary {
+        margin-top: 5vh;
+        position: sticky;
+        top: 25vh;
+        border: 1px solid #ccc;
+        padding: 10px;
+        background-color: #fff;
+    }
+
+    .cart-summary h3 {
+        background-color: white;
+        color: #d9534f;
+        padding: 5px;
+        margin-top: 0;
+    }
+
+    .cart-summary-section, .cart-summary-total {
+        display: flex;
+        justify-content: space-between;
+        padding: 5px 0;
+        border-top: 1px solid #ccc;
+    }
+
+    .cart-summary-section:first-child {
+        border-top: none;
+    }
+
+    .cart-summary-total {
+        font-size: 1.2em;
+        font-weight: bold;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .cart-summary button {
+        background-color: #d9534f;
+        color: white;
+        border: none;
+        padding: 15px;
+        width: 100%;
+        cursor: pointer;
+        font-size: 1.1em;
+        text-transform: uppercase;
+    }
+
+    .cart-summary button:hover {
+        background-color: #c9302c;
+    }
+
+    .cart-quantity-button {
+        background-color: #ddd;
+        border: none;
+        padding: 5px;
+        cursor: pointer;
+    }
+
+    .cart-quantity-button:enabled {
+        background-color: #c9302c;
+        color: white;
+    }
+
+    .cart-quantity-button:disabled {
+        background-color: #f9f9f9;
+    }
+
+    .cart-quantity-span {
+        margin: 0 5px;
+    }
+</style>
+
+<div class="cart-container">
+    <div class="cart-table-container">
+        <h1 class="cart-title">Tu bolsa</h1>
+        <table class="cart-table">
+            <thead>
+                <tr class="cart-description-row">
+                    <th>Libro</th>
+                    <th>Cantidad</th>
+                    <th>Importe</th>
+                </tr>
+            </thead>
+            <tbody id="cart-items">
+                {% for item in book_details %}
+                <tr data-book-id="{{ item.book.id }}" data-book-price="{{ item.book.precioLibro }}" data-book-max="{{ item.max }}">
+                    <td>
+                        <div class="cart-item-row">
+                            <img class="cart-item-image" src="{% static 'images/' %}{{ item.book.id }}.jpg" alt="{{ item.book.tituloLibro }}">
+                            <div class="cart-item-details">
+                                <h4>{{ item.book.tituloLibro }}</h4>
+                                <p>
+                                    {% for author in item.book.autores.all %}
+                                        {{ author.autor }}{% if not forloop.last %}, {% endif %}
+                                    {% endfor %}
+                                </p>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <button class="cart-quantity-button decrease" {% if item.count <= 1 %}disabled{% endif %}>-</button>
+                        <span class="cart-quantity-span quantity">{{ item.count }}</span>
+                        <button class="cart-quantity-button increase" {% if item.count >= item.max %}disabled{% endif %}>+</button>
+                    </td>
+                    <td class="price">${{ item.book.precioLibro|floatformat:2 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="cart-summary-container">
+        <div class="cart-summary">
+            <h3>Resumen</h3>
+            <div class="cart-summary-section">
+                <span>Subtotal</span>
+                <span id="subtotal">$0.00</span>
+            </div>
+            <div class="cart-summary-section">
+                <span>Envío</span>
+                <span>$0.00</span>
+            </div>
+            <div class="cart-summary-total">
+                <span>Total</span>
+                <span id="total">$0.00</span>
+            </div>
+            <button>IR A PAGAR</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const cartItems = document.getElementById('cart-items');
+        const subtotalElement = document.getElementById('subtotal');
+        const totalElement = document.getElementById('total');
+
+        function updateTotal() {
+            let subtotal = 0;
+            cartItems.querySelectorAll('tr').forEach(row => {
+                const price = parseFloat(row.dataset.bookPrice);
+                const quantity = parseInt(row.querySelector('.quantity').textContent);
+                subtotal += price * quantity;
+            });
+            subtotalElement.textContent = `$${subtotal.toFixed(2)}`;
+            totalElement.textContent = `$${subtotal.toFixed(2)}`;
+        }
+
+        cartItems.addEventListener('click', function (event) {
+            if (event.target.classList.contains('increase') || event.target.classList.contains('decrease')) {
+                const row = event.target.closest('tr');
+                const quantityElement = row.querySelector('.quantity');
+                let quantity = parseInt(quantityElement.textContent);
+                const maxQuantity = parseInt(row.dataset.bookMax);
+                
+                if (event.target.classList.contains('increase') && quantity < maxQuantity) {
+                    quantity++;
+                } else if (event.target.classList.contains('decrease') && quantity > 1) {
+                    quantity--;
+                }
+                
+                quantityElement.textContent = quantity;
+
+                const decreaseButton = row.querySelector('.decrease');
+                const increaseButton = row.querySelector('.increase');
+
+                decreaseButton.disabled = quantity <= 1;
+                increaseButton.disabled = quantity >= maxQuantity;
+
+                updateTotal();
+            }
+        });
+
+        updateTotal();
+    });
+</script>
+
+{% endblock %}

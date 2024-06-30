@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # MOELOS
 
@@ -249,6 +250,7 @@ class Domicilio(models.Model):
         # Nombre personalizado para la BD
         db_table = 'domicilio'
         ordering = ['codigoPostalDomicilio']
+
 
 
 """

@@ -3,14 +3,14 @@
         display: flex;
         align-items: center;
         justify-content: left;
-        padding: 10px 20px;
         background-color: #fff;
         border-bottom: 1px solid #ccc;
-        margin-top: 2vh;
-        padding-bottom: 3vh;
+
         position: fixed;
         width: 100%;
         z-index: 1;
+        top: 0vh !important;
+        min-height: 15vh;
     }
     .logo {
         display: flex;
@@ -118,6 +118,6 @@
         {% else %}
             <a href="{% url 'register' %}" class="action-link"><i class="fa-solid fa-user"></i> <div class="user-actions-text">Ingresar</div></a>
         {% endif %}
-        <a href="#" class="action-link"><i class="fa-solid fa-bag-shopping"></i> <div class="user-actions-text">Bolsa</div> </a>
+        <a href="/cart" class="action-link"><i class="fa-solid fa-bag-shopping"></i> <div class="user-actions-text">Bolsa</div> </a>
     </div>
 </header>
