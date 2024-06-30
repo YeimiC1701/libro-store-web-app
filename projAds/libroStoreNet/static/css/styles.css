@@ -1,3 +1,9 @@
+:root {
+    --colorPrimario: #D13B53;
+    --colorSecundario: #FABDBD;
+    --colorTerciario: rgb(237, 121, 121);
+}
+
 .container {
     display: grid;
     grid-template-columns: 0.5fr 6.5fr 0.5fr;
