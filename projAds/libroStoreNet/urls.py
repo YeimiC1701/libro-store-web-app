@@ -7,5 +7,6 @@ urlpatterns = [
     path('perfil/', views.perfil, name='perfil'),
     path('ingresar/', views.login, name='login'),
     path('historial/', views.historialCompras, name='historial'),
-    # path('uno/', views.uno, name='uno'),
+    path('direccion/', views.verDireccion, name='verDireccion'),
+    path('editarDireccion/', views.editarDireccion, name='editarDireccion'),
 ]
