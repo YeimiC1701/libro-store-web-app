@@ -10,7 +10,9 @@
         {% load static %}
         <!-- Bootstrap CSS -->
         <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-
+        <!-- Font Awesome CSS -->
+        <link rel="stylesheet" href="{% static 'css/all.min.css' %}">
+        <link rel="stylesheet" href="{% static 'css/fontawesome.min.css' %}">
         <!-- CSS personalizado -->
         <link rel="stylesheet" href="{% static 'css/styles.css' %}">
         <!-- jQuery y Bootstrap JavaScript -->
@@ -22,26 +24,11 @@
         {% include "_partials\Header.html" %}
 
 
-        <div class="container">
-            <div class="section1">      </div>
-            <div class="section2">      </div>
-            <div class="section3">      </div>
-            <div class="section4">      </div>
-            <div class="section5">      
-
-                {% block content %}
+        <div class="container-fluid mt-5 mx-5 mb-5">
+            {% block content %}
         
-                {% endblock %}
-
-            </div>
-            <div class="section6">      </div>
-            <div class="section7">      </div>
-            <div class="section8">      </div>
-            <div class="section9">      </div>
+            {% endblock %}
         </div>
-
-        
-
 
 
         {% include "_partials\Footer.html" %}

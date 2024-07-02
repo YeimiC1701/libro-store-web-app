@@ -3,11 +3,21 @@
 {% block title %}Home{% endblock %}
 {% load static %}
 {% block content %}
-<div class="container">
-    <h1>¡Hola, mundo!</h1>
-    <p>Bienvenido a mi sitio web.</p>
-    <button id="button1" type="button" class="btn btn-primary">Botón Bootstrap</button>
-    
+<div class="row">
+    <div class="col-12">  
+        {% include "masLeidos.html" %}
+    </div>
+
+<div class="row mt-5">
+    <div class="col-12">
+        {% include "novedades.html" %}
+    </div>
 </div>
-<script src="{% static 'js/testing/testing.js' %}"></script>
+
+<div class="row mt-5">
+    <div class="col-12">
+        {% include "tarjetas.html" %}
+    </div>
+</div>
+</div>
 {% endblock %}

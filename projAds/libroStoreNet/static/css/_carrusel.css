@@ -1,0 +1,175 @@
+h4, h2, small, a {
+    margin: 0;
+    padding: 0;
+}    
+
+a {
+    text-decoration: none;
+}
+
+.carousel {
+    /* width: 80%; */
+    margin: 10px 10px;
+}
+
+@media(min-width: 768px) {
+    .carousel {
+        width: 80%;
+        margin: 0px 10px;
+    }
+}
+
+.carousel h2 {
+    font-size: 18px;
+    line-height: 38px;
+    padding-left: 50px;
+    text-align: left;
+    color: #D13B53;
+}
+
+.carrusel-list {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    height: 420px;
+    padding: 0px;
+    margin: 0px auto;
+    max-width: 90vw;
+    overflow: hidden;
+}
+
+.carrusel-track {
+    position: relative;
+    top: 0;
+    left: 0;
+    display: flex;
+    justify-content: center;
+    transition: .35s ease-in-out;
+}
+
+.carrusel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    text-align: center;
+}
+
+.carrusel .autor {
+    text-align: center;
+    display: inline-block;
+}
+
+.carrusel h4 {
+    position: absolute;
+    z-index: 1;
+    font-size: 22px;
+    line-height: 23px;
+    color: #fff;
+    padding: 15px;
+}
+
+.carrusel h4 small {
+    font-size: 15px;
+    display: block;
+}
+
+.carrusel a img {
+    object-fit: scale-down;
+    height: 200px;
+    margin-top: 0px;
+    transition: 0.3s ease-in-out;
+}
+
+@media(min-width: 768px) {
+    .carrusel{
+        width: 275px;
+    }
+    /* .carrusel a img {
+        width: 250px;
+    } */
+}
+
+.carrusel-arrow {
+    border-radius: 50%;
+    background-color: #D13B53;
+    position: absolute;
+    z-index: 4;
+    width: 28px;
+    height: 28px;
+    text-align: center;
+    border: 0;
+    cursor: pointer;
+}
+
+.carrusel-arrow {
+    outline: 0;
+}
+
+.carrusel-arrow svg {
+    width: 12px;
+    height: 100%;
+    color: #fff;
+}
+
+.carrusel-prev {
+    left: 0px;
+}
+
+.carrusel-next {
+    right: 0px;
+}
+
+.carrusel button {
+    background-color:#D13B53;
+    margin-bottom: 0px;
+    border-radius: 0;
+    border-color: gray;
+    transition: .3s transform ease;
+}
+
+.carousel button:hover {
+    background-color: #B02D40;
+    transform: scale(1.1);
+    border-color: gray;
+}
+
+.carrusel .titulo{
+    text-transform: uppercase;
+    font-weight: 500;
+    height: 55px;
+}
+
+.carrusel .autor {
+    text-transform: capitalize;
+    font-weight: 400;
+    text-align: center;
+}
+
+.carrusel .precio {
+    font-weight: bolder;
+}
+
+.carrusel div, .carrusel p {
+    margin: 0 0 10px; 
+} 
+
+.carrusel div button {
+    margin-bottom: 0;
+    margin-top: 0;
+}
+
+.precio, .autor, .titulo, .titulo a {
+    text-align: center;
+    display: flex;
+    margin: 0;
+    text-decoration: none;
+    color: black;
+}
+
+.autor a {
+    text-decoration: none;
+    color: gray;
+    text-align: center;
+}

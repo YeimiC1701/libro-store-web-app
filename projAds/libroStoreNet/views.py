@@ -1,7 +1,21 @@
-from django.shortcuts import render
+from django.contrib import messages
+from django.shortcuts import redirect, render
+from libroStoreNet.models import *
+from django.contrib.auth.hashers import check_password, make_password
+import re
 
 
 # Create your views here.
+
+"""
+Función de vista que recupera los 10 libros más leídos y los muestra en la plantilla 'masLeidos.html'.
+
+Args:
+    request: El objeto de solicitud HTTP.
+
+Returns:
+    Una respuesta HTTP que renderiza la plantilla 'masLeidos.html' con los libros más leídos.
+"""
 def home(request):
     masLeidos = Libro.objects.select_related('categoria').filter(
                     categoria='1').prefetch_related('autores')
@@ -39,13 +53,11 @@ def login(request):
             messages.success(request, 'Login successful.')
             print("Login successful.")
             return redirect('perfil')  # Replace with your desired redirect
-        
         elif cliente and password == cliente.contraseniaCliente:
             request.session['cliente_id'] = cliente.id
             messages.success(request, 'Login successful.')
             print("Login successful.")
             return redirect('perfil')  # Replace with your desired redirect
-        
         else:
             print("Login failed dentro de else.")
             messages.error(request, 'Correo o contraseña incorrectos. Por favor, inténtelo de nuevo.')
