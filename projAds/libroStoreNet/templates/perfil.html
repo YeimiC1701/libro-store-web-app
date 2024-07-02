@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %} Perfil {% endblock %}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/_perfil.css' %}">
+<link rel="stylesheet" href="{% static 'css/all.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/fontawesome.min.css' %}">
+<h1><i>Perfil</i></h1>
+<p>
+    {{ usuario.nombresCliente}} {{usuario.apellidoPaternoCliente}} 
+    {{usuario.apellidoMaternoCliente }}
+</p>
+<p>
+    {{ usuario.emailCliente }}
+</p>
+
+<div class="seccion" style="margin-top: 40px;">
+    <a class="seccion-grid" href="/historial">
+
+        <i class="fa-solid fa-clock-rotate-left"></i>
+
+        <div class="texto"> 
+            <h3> Historial de compras </h3>
+            <p> Compras realizadas con esta cuenta </p>
+        </div>
+        
+    </a>
+
+</div>
+
+<div class="seccion-doble">
+    
+    <div class="seccion">
+        <a class="seccion-grid" href="#">
+            
+            <i class="fa-solid fa-address-card"></i>
+            
+            <div class="texto"> 
+                <h3> Informacion de acceso </h3>
+                <p> Datos personales y de acceso a la cuenta </p>
+            </div>
+
+        </a>
+    </div>
+
+    <div class="seccion" style="border-top: none;">
+        <a class="seccion-grid" href="/direccion">
+            
+            <i class="fa-regular fa-map"></i>
+            
+            <div class="texto"> 
+                <h3> Direcci&oacute;n de envio </h3>
+                <p> Direcci&oacute;n guardada en tu cuenta </p>
+            </div>
+
+        </a>
+    </div>
+
+</div>
+
+{% endblock %}

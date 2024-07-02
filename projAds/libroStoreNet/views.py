@@ -3,4 +3,113 @@ from django.shortcuts import render
 
 # Create your views here.
 def home(request):
-    return render(request, 'index.html')
+    masLeidos = Libro.objects.select_related('categoria').filter(
+                    categoria='1').prefetch_related('autores')
+    novedades = Libro.objects.select_related('categoria').filter(
+                    categoria='2').prefetch_related('autores')
+    data = {
+        'titulo': {"masLeidos": "# Libros más leídos", "novedades": "# Novedades"},
+        'librosMasLeidos': masLeidos,
+        'novedades': novedades,
+    }
+    return render(request, 'index.html', data)
+
+"""
+# Vista de pruebas para redireccion 
+def uno(request):
+    librosMasLeidos = Libro.objects.select_related('categoria').filter(
+                    categoria='2').prefetch_related('autores')[:3]
+    data = {
+        'titulo': '# VISTA DE PRUEBAS #',
+        'librosMasLeidos': librosMasLeidos,
+    }
+    return render(request, "uno.html", data)
+
+"""
+def login(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        cliente = Cliente.objects.filter(emailCliente=email).first()
+        print("Cliente: ", cliente, "contraseña: ", password)
+
+        if cliente and check_password(password, cliente.contraseniaCliente):
+            request.session['cliente_id'] = cliente.id
+            messages.success(request, 'Login successful.')
+            print("Login successful.")
+            return redirect('perfil')  # Replace with your desired redirect
+        
+        elif cliente and password == cliente.contraseniaCliente:
+            request.session['cliente_id'] = cliente.id
+            messages.success(request, 'Login successful.')
+            print("Login successful.")
+            return redirect('perfil')  # Replace with your desired redirect
+        
+        else:
+            print("Login failed dentro de else.")
+            messages.error(request, 'Correo o contraseña incorrectos. Por favor, inténtelo de nuevo.')
+    
+    print("Login failed en la vista.")
+    return render(request, 'login.html')
+
+
+def perfil(request):
+    idUsuario = request.session.get('cliente_id')
+    usuario = Cliente.objects.get(id = idUsuario)
+
+    data = {
+        'usuario': usuario,
+    }
+
+    return render(request, "perfil.html", data)
+
+
+def historialCompras(request):
+    idUsuario = request.session.get('cliente_id')
+    usuario = Cliente.objects.get(id = idUsuario)
+    print("Usuario en historial: ", usuario)
+    compras = Transaccion.objects.select_related('cliente').filter(cliente = usuario)
+    
+    data = {
+        'compras': compras,
+    }
+
+    return render(request, "historial-compras.html", data)
+
+
+def verDireccion(request):
+    idUsuario = request.session.get('cliente_id')
+    usuario = Cliente.objects.get(id = idUsuario)
+    domicilio = Domicilio.objects.select_related('cliente').filter(cliente = usuario)
+    domicilio = domicilio.first()
+    # print("Domicilio: ", domicilio.estadoDomicilio)
+    print("Usuario en domicilio: ", usuario)
+    
+    data = {
+        'direccion': domicilio,
+    }
+
+    return render(request, "direccion.html", data)
+
+
+def editarDireccion(request):
+    if request.method == 'POST':
+        idDireccion = int(request.POST.get('idDireccion'))
+        calle = request.POST.get('calle').strip().title()
+        numero = request.POST.get('numero').strip().title()
+        colonia = request.POST.get('colonia').strip().title()
+        codigoPostal = request.POST.get('codigoPostal').strip().title()
+        delMnpio = request.POST.get('delMnpio').strip().title()
+        estado = request.POST.get('estado').strip().title()
+
+        nuevaDireccion = Domicilio.objects.get(id = idDireccion)
+        nuevaDireccion.calleDomicilio = calle
+        nuevaDireccion.numeroExteriorDomicilio = numero
+        nuevaDireccion.coloniaDomicilio = colonia
+        nuevaDireccion.codigoPostalDomicilio = codigoPostal
+        nuevaDireccion.municipioDomicilio = delMnpio
+        nuevaDireccion.estadoDomicilio = estado
+        nuevaDireccion.save()
+
+    return redirect('/direccion/')
