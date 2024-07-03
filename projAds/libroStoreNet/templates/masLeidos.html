@@ -20,7 +20,7 @@
             {% for libro in librosMasLeidos %}
             <div class="carrusel">
                 <div>
-                    <a href="#">
+                    <a href="{% url 'libroDetalle' libro.id %}">
                         <picture>
                             <img src="{{ libro.portadaLibro.url }}" alt="Portada del libro">
                         </picture>

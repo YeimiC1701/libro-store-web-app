@@ -19,8 +19,4 @@ $(document).ready(function() {
     currentValue = parseInt($('#cantidad').val());
       $('#cantidad').val(currentValue + 1);
   });
-
-
-
-
 });
