@@ -132,7 +132,7 @@
     </div>
     <div class="user-actions">
         {% if request.session.cliente_id %}
-            <a href="#" class="action-link"><i class="fa-solid fa-user"></i> <div class="user-actions-text">{{ user_name }}</div></a>
+            <a href="{% url 'perfil' %}" class="action-link"><i class="fa-solid fa-user"></i> <div class="user-actions-text">{{ user_name }}</div></a>
             <a href="{% url 'logout' %}" class="action-link"><i class="fa-solid fa-sign-out-alt"></i> <div class="user-actions-text">Salir</div></a>
         {% else %}
             <a href="{% url 'register' %}" class="action-link"><i class="fa-solid fa-user"></i> <div class="user-actions-text">Ingresar</div></a>
