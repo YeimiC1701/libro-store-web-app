@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}Editar Perfil{% endblock %}
+
+{% block content %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/_datos-cliente.css' %}">
+
+<div class="row">
+    <div class="col-12 col-md-9 mx-auto">
+        <h1><i>Editar perfil</i></h1>
+        <form id="formulario-direccion" action="{% url 'editarDatos' %}" method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="idCliente" value="{{cliente.id}}">
+            
+            <div class="form-group">
+                <label for="nombres">Nombre(s)</label>
+                <input type="text" class="form-control" name="nombres" id="nombres"
+                value="{{ cliente.nombresCliente }}" maxlength="50" minlength="2" 
+                placeholder="Ingresa tu(s) nombre(s)" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="apPaterno">Primer apellido</label>
+                <input type="text" class="form-control" name="apPaterno" id="apPaterno"
+                value="{{ cliente.apellidoPaternoCliente }}" maxlength="50" minlength="2" 
+                placeholder="Ingresa tu primer apellido" required>
+            </div>
+
+            <div class="form-group">
+                <label for="apMaterno">Segundo apellido</label>
+                <input type="text" class="form-control" name="apMaterno" id="apMaterno"
+                value="{{ cliente.apellidoMaternoCliente }}" maxlength="50" minlength="2" 
+                placeholder="Ingresa tu segundo apellido" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Correo electrónico</label>
+                <input type="email" class="form-control" name="email" id="email"
+                value="{{ cliente.emailCliente }}" maxlength="30" minlength="2" 
+                placeholder="Ingresa tu correo electrónico" required>
+            </div>
+
+            <div class="mt-5">
+                <h4>Verificar información actual</h4>
+            </div>
+
+            <div class="form-group">
+                <label for="currentEmail">Correo electrónico actual</label>
+                <input type="email" class="form-control" name="currentEmail" id="currentEmail"
+                maxlength="30" minlength="2" placeholder="Ingresa tu correo electrónico actual" required>
+            </div>
+
+            <div class="form-group">
+                <label for="currentPassword">Contraseña actual</label>
+                <input type="password" class="form-control" name="currentPassword" id="currentPassword"
+                maxlength="128" minlength="8" placeholder="Ingresa tu contraseña actual" required>
+            </div>
+            
+            <div class="mt-5">
+                <h4>Cambiar contraseña</h4>
+            </div>
+
+            <div class="form-group">
+                <label for="password1">Nueva contraseña</label>
+                <input type="password" class="form-control" name="password1" id="password1"
+                maxlength="128" minlength="8" placeholder="Ingresa tu nueva contraseña">
+            </div>
+            
+            <div class="form-group">
+                <label for="password2">Confirmar contraseña</label>
+                <input type="password" class="form-control" name="password2" id="password2"
+                maxlength="128" minlength="8" placeholder="Confirma tu nueva contraseña">
+            </div>
+            
+            <div id="liveAlertPlaceholder"></div>
+            <div class="box-boton">
+                <button type="submit" class="btn btn-primary btn-guardar" id="liveAlertBtn">Guardar</button>
+            </div>
+        </form>    
+    </div>
+</div>
+{% endblock %}
