@@ -123,12 +123,12 @@
             <span class="logo-text">Libro <span class="net-text">Net</span> Store</span>
         </div>
         <nav class="nav">
-            <a href="#" class="nav-link">Catálogo</a>
+            <a href="{% url 'catalogo' %}" class="nav-link">Catálogo</a>
         </nav>
     </div>
     <div class="search-bar mx-auto">
-        <input type="text" placeholder="¿Qué estás buscando?">
-        <button><i class="fa-solid fa-magnifying-glass"></i></button>
+        <input id="buscador" type="text" placeholder="¿Qué estás buscando?">
+        <button id="btnBuscador"><i class="fa-solid fa-magnifying-glass"></i></button>
     </div>
     <div class="user-actions">
         {% if request.session.cliente_id %}

@@ -1,0 +1,66 @@
+{% extends 'base.html' %} 
+{% block title %}Catalogo{% endblock %} 
+{% load static%}
+{% block content %}
+<div class="row d-flex justify-content-center align-items-center mt-5">
+  <div class="card" style="width: 24rem">
+        <div class="row">
+                <img src="{{ libro.portadaLibro.url }}" class="img-fluid book-cover" style="max-height: 250px; max-width: 250px" alt="{{ libro.tituloLibro }}">
+              <div class="card-body">
+                <h1>{{ libro.tituloLibro }}</h1>
+                {% for autor in libro.autores.all %}
+                    <p class="autor">{{ autor.autor }}</p>
+                {% endfor %}
+                <p class="precio">$ {{ libro.precioLibro }}</p>
+
+                {% comment %} <div class="col-4">
+                  <div class="input-group">
+                      <div class="input-group-prepend">
+                          <button class="btn btn-outline-secondary" type="button" id="decremento">-</button>
+                      </div>
+                      <input type="text" class="form-control" id="cantidad" name="cantidad">
+                      <div class="input-group-append">
+                          <button class="btn btn-outline-secondary" type="button" id="incremento">+</button>
+                      </div>
+                  </div>
+              </div> {% endcomment %}
+
+              <div>
+                <button id="libDetAdd" type="button" class="btn btn-primary" libro-id="{{ libro.id }}">Añadir a bolsa</button>
+              </div>
+            </div>
+        </div>
+  </div>
+<p>Descripción: {{ libro.resumenLibro }}</p>
+</div>
+
+<script>
+  $('#libDetAdd').click(function() {
+    function addToCart(bookId) {
+      fetch('{% url "add_to_cart" 0 %}'.replace('/0/', `/${bookId}/`), {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+              'X-CSRFToken': '{{ csrf_token }}'
+          },
+          body: JSON.stringify({ book_id: bookId })
+      })
+      .then(response => response.json())
+      .then(data => {
+          if (data.success) {
+              alert('Book added to cart successfully');
+          } else {
+              alert('Failed to add book to cart');
+          }
+      });
+  }
+
+  const libroId = this.getAttribute('libro-id');
+  addToCart(libroId);
+
+});
+</script>
+
+<script src="{% static 'js/libroDetalle.js' %}"></script>
+      {% comment %} <a href="{% url 'book_list' %}" class="btn btn-primary mt-3">Volver a la lista</a> {% endcomment %}
+{% endblock %}

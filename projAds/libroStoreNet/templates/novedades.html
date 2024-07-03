@@ -28,7 +28,7 @@
                     <!-- Aqui se redirige a la plantilla de un libro por su id -->
                     <a href="libro/{{libro.id}}"> 
                     {% endcomment %}
-                    <a href="#">
+                    <a href="{% url 'libroDetalle' libro.id %}">
                         <picture>
                             <img src="{{ libro.portadaLibro.url }}" alt="Portada del libro">
                         </picture>
