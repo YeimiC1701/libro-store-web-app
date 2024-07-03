@@ -24,10 +24,16 @@
                       </div>
                   </div>
               </div> {% endcomment %}
-
+              
+              {% if libro.stockLibro > 0 %}
               <div>
                 <button id="libDetAdd" type="button" class="btn btn-primary" style="background-color: var(--colorPrimario); color:white" libro-id="{{ libro.id }}">Añadir a bolsa</button>
               </div>
+              {% else %}
+                <div>
+                  <button type="button" class="btn btn-secondary" disabled>Sin Stock</button>
+                </div>
+              {% endif %}
             </div>
         </div>
   </div>
