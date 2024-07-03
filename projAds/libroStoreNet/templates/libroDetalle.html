@@ -5,7 +5,7 @@
 <div class="row d-flex justify-content-center align-items-center mt-5">
   <div class="card" style="width: 24rem">
         <div class="row">
-                <img src="{{ libro.portadaLibro.url }}" class="img-fluid book-cover" style="max-height: 250px; max-width: 250px" alt="{{ libro.tituloLibro }}">
+                <img id="img-detalle" src="{{ libro.portadaLibro.url }}" class="img-fluid book-cover" style="max-height: 250px; max-width: 250px" alt="{{ libro.tituloLibro }}">
               <div class="card-body">
                 <h1>{{ libro.tituloLibro }}</h1>
                 {% for autor in libro.autores.all %}
@@ -26,7 +26,7 @@
               </div> {% endcomment %}
 
               <div>
-                <button id="libDetAdd" type="button" class="btn btn-primary" libro-id="{{ libro.id }}">Añadir a bolsa</button>
+                <button id="libDetAdd" type="button" class="btn btn-primary" style="background-color: var(--colorPrimario); color:white" libro-id="{{ libro.id }}">Añadir a bolsa</button>
               </div>
             </div>
         </div>
@@ -35,6 +35,27 @@
 </div>
 
 <script>
+  const urls = [
+        "img/21.jpg",
+        "img/22.jpg",
+        "img/23.jpg",
+        "img/24.jpg",
+        "img/25.jpg",
+        "img/26.jpg",
+        "img/27.jpg",
+        "img/28.jpg",
+        "img/29.jpg",
+        "img/30.jpg",
+        "img/31.jpg",
+        "img/32.jpg",
+        "img/33.jpg",
+        "img/34.jpg",
+        "img/35.jpg",
+    ];
+
+    const randomUrl = urls[Math.floor(Math.random() * urls.length)];
+    document.getElementById("img-detalle").alt = randomUrl;
+
   $('#libDetAdd').click(function() {
     function addToCart(bookId) {
       fetch('{% url "add_to_cart" 0 %}'.replace('/0/', `/${bookId}/`), {
