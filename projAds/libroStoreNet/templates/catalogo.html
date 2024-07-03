@@ -1,0 +1,68 @@
+{% extends 'base.html' %} 
+{% block title %}Catalogo{% endblock %} 
+{% load static%} 
+{% block content %}
+<div class="row" id="libro-grid">
+  {% for libro in page_obj %}
+  <div class="col-md-3 mb-3">
+    <div class="card" style="width: 18rem">
+      <a href="{% url 'libroDetalle' libro.id %}">
+        <img
+          src="{{ libro.portadaLibro.url }}"
+          class="card-img-top img-fluid"
+          style="max-height: 150px; max-width: 150px"
+          alt="{{ libro.tituloLibro }}"
+        />
+    </a>
+      <div class="card-body">
+        <h5 class="card-title">{{ libro.tituloLibro }}</h5>
+        {% for autor in libro.autores.all %}
+        <p class="card-title">{{autor.autor}}</p>
+        {% endfor %}
+        <p class="card-text">Precio: {{ libro.precioLibro }}</p>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<div class="d-flex justify-content-center mt-4">
+  <nav>
+    <ul class="pagination">
+      {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a
+          class="page-link"
+          href="?page={{ page_obj.previous_page_number }}&sort={{ sort_by }}&q={{ query }}"
+          aria-label="Anterior"
+        >
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      {% endif %} 
+      {% for num in page_obj.paginator.page_range %} 
+      {% if page_obj.number == num %}
+      <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+      {% elif num > page_obj.number|add:'-5' and num < page_obj.number|add:'5'%}
+      <li class="page-item">
+        <a
+          class="page-link"
+          href="?page={{ num }}&sort={{ sort_by }}&q={{ query }}"
+          >{{ num }}</a
+        >
+      </li>
+      {% endif %} {% endfor %} {% if page_obj.has_next %}
+      <li class="page-item">
+        <a
+          class="page-link"
+          href="?page={{ page_obj.next_page_number }}&sort={{ sort_by }}&q={{ query }}"
+          aria-label="Siguiente"
+        >
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+      {% endif %}
+    </ul>
+  </nav>
+</div>
+{% endblock %}
