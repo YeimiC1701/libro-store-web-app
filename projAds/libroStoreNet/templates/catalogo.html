@@ -8,10 +8,11 @@
     <div class="card" style="width: 18rem">
       <a href="{% url 'libroDetalle' libro.id %}">
         <img
+          id="img-catalogo"
           src="{{ libro.portadaLibro.url }}"
           class="card-img-top img-fluid"
           style="max-height: 150px; max-width: 150px"
-          alt="{{ libro.tituloLibro }}"
+          alt=""
         />
     </a>
       <div class="card-body">
@@ -21,7 +22,7 @@
         {% endfor %}
         <p class="card-text">Precio: {{ libro.precioLibro }}</p>
         <div>
-          <button type="button" class="btn btn-primary add-to-bolsa-btn" libro-id="{{ libro.id }}">Añadir a bolsa</button>
+          <button type="button" class="btn add-to-bolsa-btn" style="background-color: var(--colorPrimario); color:white" libro-id="{{ libro.id }}">Añadir a bolsa</button>
         </div>
       </div>
     </div>
@@ -75,6 +76,27 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
+
+    const urls = [
+        "img/21.jpg",
+        "img/22.jpg",
+        "img/23.jpg",
+        "img/24.jpg",
+        "img/25.jpg",
+        "img/26.jpg",
+        "img/27.jpg",
+        "img/28.jpg",
+        "img/29.jpg",
+        "img/30.jpg",
+        "img/31.jpg",
+        "img/32.jpg",
+        "img/33.jpg",
+        "img/34.jpg",
+        "img/35.jpg",
+    ];
+
+    const randomUrl = urls[Math.floor(Math.random() * urls.length)];
+    document.getElementById("img-catalogo").alt = randomUrl;
     // Get all add-to-cart buttons
     const addToCartButtons = document.querySelectorAll('.add-to-bolsa-btn');
 
