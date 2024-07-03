@@ -449,18 +449,22 @@ def checkout(request):
     domicilio = Domicilio.objects.select_related('cliente').filter(cliente = usuario)
     domicilio = domicilio.first()
 
-    # Simulación de un pedido
-    libros = Libro.objects.all().order_by('stockLibro')[:4]
-    
+    # Retrieve the cart items from the session or create an empty list if not found
+    idLibros = request.session.get("cart_items", [])
+    conteo_libros = Counter(idLibros)
+
+    libros = Libro.objects.filter(id__in=idLibros)
+
     # Crear los items del pedido
     items_pedido = []
-    conteo_libros = Counter(libros)
+    print('Libros ennnnnnnnnn pedido', conteo_libros)
     for libro in libros:
+        cantidad = conteo_libros[libro.id]
         item = {
             'libro': libro,
-            'cantidad': 1,  # Asumiendo 1 por simplicidad, ajusta según sea necesario
+            'cantidad': cantidad,  
             'precio': libro.precioLibro,
-            'subtotal': libro.precioLibro * 1,  # Asumiendo 1 por simplicidad, ajusta según sea necesario
+            'subtotal': libro.precioLibro * cantidad, 
         }
         items_pedido.append(item)
     
@@ -480,3 +484,15 @@ def checkout(request):
     }
 
     return render(request, "checkout.html", data)
+
+
+# def finalizarCompra(request):
+#     if request.method == 'POST':
+#         # Datos del cliente
+#         idUsuario = request.session.get('cliente_id')
+#         usuario = Cliente.objects.get(id = idUsuario)
+        
+#         # Retrieve the cart items from the session or create an empty list if not found
+#         cart_items = request.session.get("cart_items", [])
+
+#     return redirect('historial')
