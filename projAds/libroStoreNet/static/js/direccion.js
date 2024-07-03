@@ -29,8 +29,6 @@ const btnGuardar = document.getElementById('liveAlertBtn');
     });
     
     btnGuardar.addEventListener('click', function(e) {
-        
-
         let confirmacion = confirm("¿Desea guardar la nueva dirección?");
         if(!confirmacion) {
             e.preventDefault();
