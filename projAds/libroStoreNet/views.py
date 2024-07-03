@@ -319,8 +319,6 @@ def verDireccion(request):
     usuario = Cliente.objects.get(id = idUsuario)
     domicilio = Domicilio.objects.select_related('cliente').filter(cliente = usuario)
     domicilio = domicilio.first()
-    # print("Domicilio: ", domicilio.estadoDomicilio)
-    print("Usuario en domicilio: ", usuario)
     
     data = {
         'direccion': domicilio,
@@ -331,21 +329,41 @@ def verDireccion(request):
 
 def editarDireccion(request):
     if request.method == 'POST':
-        idDireccion = int(request.POST.get('idDireccion'))
-        calle = request.POST.get('calle').strip().title()
-        numero = request.POST.get('numero').strip().title()
-        colonia = request.POST.get('colonia').strip().title()
-        codigoPostal = request.POST.get('codigoPostal').strip().title()
-        delMnpio = request.POST.get('delMnpio').strip().title()
-        estado = request.POST.get('estado').strip().title()
+        idDireccion = request.POST.get('idDireccion')
 
-        nuevaDireccion = Domicilio.objects.get(id = idDireccion)
-        nuevaDireccion.calleDomicilio = calle
-        nuevaDireccion.numeroExteriorDomicilio = numero
-        nuevaDireccion.coloniaDomicilio = colonia
-        nuevaDireccion.codigoPostalDomicilio = codigoPostal
-        nuevaDireccion.municipioDomicilio = delMnpio
-        nuevaDireccion.estadoDomicilio = estado
-        nuevaDireccion.save()
+        if not idDireccion:
+            cliente = Cliente.objects.get(id = request.session.get('cliente_id'))
+            print("Cliente en editarDireccion: ", cliente.nombresCliente)
+
+            direccion = Domicilio(
+                calleDomicilio = request.POST.get('calle').strip().title(),
+                numeroExteriorDomicilio = request.POST.get('numero').strip().title(),
+                codigoPostalDomicilio = request.POST.get('codigoPostal').strip().title(),
+                coloniaDomicilio = request.POST.get('colonia').strip().title(),
+                municipioDomicilio = request.POST.get('delMnpio').strip().title(),
+                estadoDomicilio = request.POST.get('estado').strip().title(),
+                cliente = cliente
+            )
+
+            print("Direccion en editarDireccion: ", direccion)
+            direccion.save()
+        
+        else:
+            idDireccion = int(idDireccion)
+            calle = request.POST.get('calle').strip().title()
+            numero = request.POST.get('numero').strip().title()
+            colonia = request.POST.get('colonia').strip().title()
+            codigoPostal = request.POST.get('codigoPostal').strip().title()
+            delMnpio = request.POST.get('delMnpio').strip().title()
+            estado = request.POST.get('estado').strip().title()
+
+            nuevaDireccion = Domicilio.objects.get(id = idDireccion)
+            nuevaDireccion.calleDomicilio = calle
+            nuevaDireccion.numeroExteriorDomicilio = numero
+            nuevaDireccion.coloniaDomicilio = colonia
+            nuevaDireccion.codigoPostalDomicilio = codigoPostal
+            nuevaDireccion.municipioDomicilio = delMnpio
+            nuevaDireccion.estadoDomicilio = estado
+            nuevaDireccion.save()
 
     return redirect('/direccion/')
