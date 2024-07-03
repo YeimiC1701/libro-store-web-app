@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+{% load static %}
+{% block content %}
+<style>
+    .register-container {
+        position: relative;
+        max-width: 70vw;
+        padding: 5vw;
+        background: white;
+        border-radius: 8px;
+        min-height: 50vh;
+        padding-top: 15vh;
+    }
+    .register-title {
+        top: 10vh;
+        position: absolute;
+        left: 1vw;
+        color: #d9534f;
+        margin-bottom: 20px;
+        font-size: 24px;
+        font-weight: bold;
+    }
+    .form-control {
+        border: none;
+        border-bottom: 1px solid #ccc;
+        border-radius: 0;
+        box-shadow: none;
+        padding: 10px;
+    }
+    .form-control:focus {
+        border-bottom: 2px solid #d9534f;
+        box-shadow: none;
+    }
+    .btn-primary {
+        background-color: #d9534f;
+        border-color: #d9534f;
+        width: 100px;
+    }
+    .btn-primary:hover {
+        background-color: #c9302c;
+        border-color: #ac2925;
+    }
+    .form-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-right: 10px;
+    }
+    .text-right {
+        margin-top: 8px;
+    }
+</style>
+<div class="container d-flex justify-content-center align-items-center min-vh-70">
+    <div class="register-container col-12 col-md-8 col-lg-6 p-5 bg-white rounded ">
+        <h2 class="register-title">Crear cuenta</h2>
+        <form method="post" action="{% url 'register' %}">
+            {% csrf_token %}
+            <div class="form-row row mt-5">
+                <div class="form-group col-md-6">
+                    <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Nombre" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Apellido" required>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-12">
+                    <input type="email" class="form-control" id="email" name="email" placeholder="Correo electrónico" required>
+                </div>
+            </div>
+            <div class="form-row row">
+                <div class="form-group col-md-6">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Contraseña" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirme contraseña" required>
+                </div>
+            </div>
+            <div class="form-row row justify-content-between align-items-center">
+                <button type="submit" class="btn btn-primary">Crear</button>
+                <p class="text-right mb-0">
+                    <a href="/login">Ya tengo una cuenta</a>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
