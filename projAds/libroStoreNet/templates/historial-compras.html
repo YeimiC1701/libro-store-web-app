@@ -9,51 +9,47 @@
 <link rel="stylesheet" href="{% static 'css/_historial-compras.css' %}">
 <link rel="stylesheet" href="{% static 'css/fontawesome.min.css' %}">
 
-<h1><i>Historial de compras</i></h1>
-<div>
-
-    <table class="table table-striped">
-        <!-- <thead>
-            <tr>
-                <th>Fecha</th>
-                <th>id</th>
-                <th>Total</th>
-            </tr>
-        </thead> -->
-        <tbody>
-        {% for compra in compras %}
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Fecha: {{ compra.tiempoTransaccion.day }}/{{ compra.tiempoTransaccion.month }}/{{ compra.tiempoTransaccion.year }} {{ compra.tiempoTransaccion.time}}</th>
-            <th scope="col">Folio de compra: {{ compra.id }} </th>
-            <th scope="col">Cantidad</th>
-            <th scope="col">Total: ${{ compra.totalTransaccion }}</th>
-        </tr>
-            <tr>
-                <td colspan="5">
-                    <table class="table">
-                        <tbody>
-                            {% for detalle in compra.transaccioninterlibro_set.all %}
-                            <tr>
-                                <td>{{ forloop.counter }}</td>
-                                <td id="portada">
-                                    <img src="{{ detalle.idLibro.portadaLibro.url }}" alt="portada">
-                                </td>
-                                <td>{{ detalle.idLibro.tituloLibro }} 
-                                    <p> {% for autor in detalle.idLibro.autores.all %}
-                                        {{ autor.autor }} {% endfor %}</p>
-                                </td>
-                                <td id="cantidad">{{ detalle.piezas }}</td>
-                                <td id="precio">${{ detalle.precio }}</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
+<div class="row">
+    <div class="col-9">
+        <div class="historial">
+            <h1><i>Historial de compras</i></h1>
+        
+            <table class="table table-striped">
+                <tbody>
+                {% for compra in compras %}
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Fecha: {{ compra.tiempoTransaccion.day }}/{{ compra.tiempoTransaccion.month }}/{{ compra.tiempoTransaccion.year }} {{ compra.tiempoTransaccion.time}}</th>
+                    <th scope="col">Folio de compra: {{ compra.id }} </th>
+                    <th scope="col">Cantidad</th>
+                    <th scope="col">Total: ${{ compra.totalTransaccion }}</th>
+                </tr>
+                    <tr>
+                        <td colspan="5">
+                            <table class="table">
+                                <tbody>
+                                    {% for detalle in compra.transaccioninterlibro_set.all %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td id="portada">
+                                            <img src="{{ detalle.idLibro.portadaLibro.url }}" alt="portada">
+                                        </td>
+                                        <td>{{ detalle.idLibro.tituloLibro }} 
+                                            <p> {% for autor in detalle.idLibro.autores.all %}
+                                                {{ autor.autor }} {% endfor %}</p>
+                                        </td>
+                                        <td id="cantidad">{{ detalle.piezas }}</td>
+                                        <td id="precio">${{ detalle.precio }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>   
+    </div>
 </div>
 {% endblock %}
