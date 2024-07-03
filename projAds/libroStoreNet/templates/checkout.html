@@ -7,7 +7,7 @@
 
 <style>
     .formulario-tarjeta {
-        /* visibility: hidden; */
+        visibility: hidden;
     }
 
     .box-boton {
@@ -99,9 +99,9 @@
 
         <dv class="formulario-tarjeta mt-5 row" id="formulario-tarjeta" >
             <h3>Tarjeta: </h3>
-            <!-- FALTA POR IMPLEMENTAR LA FUNCIOANLIDAD DE FINALIZAR COMRA -->
-            <!-- <form action="{% comment %}{% url 'finalizarCompra' %}"> {% endcomment %}-->
-            <form action="#">
+            <form action="{% url 'finalizarCompra' %}" method="POST">
+                {% csrf_token %}
+ 
                 <div class="row g-3 mt-2 align-items-center">
                     <div class="col-auto">
                         <label for="numeroTarjeta" class="form-label">Numero de tarjeta</label>
