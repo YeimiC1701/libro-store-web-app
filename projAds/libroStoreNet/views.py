@@ -1,14 +1,17 @@
-from django.contrib import messages
-from django.shortcuts import redirect, render
-from libroStoreNet.models import *
-from django.contrib.auth.hashers import check_password, make_password
 import re
-from django.shortcuts import get_list_or_404
 #from django.contrib.auth.decorators import login_required
 #from django.contrib.auth import update_session_auth_hash
 from collections import Counter
+
+from django.contrib import messages
+from django.contrib.auth.hashers import check_password, make_password
+from django.core.paginator import Paginator
+from django.db.models import Q
 from django.http import JsonResponse
+from django.shortcuts import (get_list_or_404, get_object_or_404, redirect,
+                              render)
 from django.views.decorators.csrf import csrf_exempt
+from libroStoreNet.models import *
 
 # Create your views here.
 
@@ -349,3 +352,31 @@ def editarDireccion(request):
         nuevaDireccion.save()
 
     return redirect('/direccion/')
+
+
+def catalogo(request):
+    query = request.GET.get("q", "")
+    sort_by = request.GET.get("sort", "tituloLibro")
+
+    if query:
+        libros = Libro.objects.filter(
+            Q(title__icontains=query) | Q(author__icontains=query)
+        ).order_by("-" + sort_by)
+    else:
+        libros = Libro.objects.all().prefetch_related("autores").order_by("-" + sort_by)
+
+    paginator = Paginator(libros, 10)  # 10 libros por página
+
+    numero_pagina = request.GET.get("page")
+    page_obj = paginator.get_page(numero_pagina)
+
+    return render(
+        request,
+        "catalogo.html",
+        {"page_obj": page_obj, "sort_by": sort_by, "query": query},
+    )
+
+
+def libroDetalle(request, pk):
+    libro = get_object_or_404(Libro.objects.prefetch_related("autores"), pk=pk)
+    return render(request, "libroDetalle.html", {"libro": libro})
