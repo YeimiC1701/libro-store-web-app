@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Ingresar{% endblock %}
+{% load static %}
+{% block content %}
+<style>
+    .form-control {
+        border: none;
+        border-bottom: 1px solid #ccc;
+        border-radius: 0;
+        box-shadow: none;
+    }
+    .form-control:focus {
+        border-bottom: 2px solid #d9534f;
+        box-shadow: none;
+    }
+    .btn-primary {
+        background-color: #d9534f;
+        border-color: #d9534f;
+        width: 100px;
+    }
+    .btn-primary:hover {
+        background-color: #c9302c;
+        border-color: #ac2925;
+    }
+</style>
+<div style="max-width: 90vw;" class="container d-flex justify-content-center align-items-center min-vh-70">
+    <div class="col-md-6 p-5 bg-white">
+        <h2 class="text-danger mb-4">Iniciar Sesión</h2>
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            <div class="form-group mb-3">
+                <input type="email" class="form-control" name="email" placeholder="Correo electrónico" required>
+            </div>
+            <div class="form-group mb-3">
+                <input type="password" class="form-control" name="password" placeholder="Contraseña" required>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+                <button type="submit" class="btn btn-danger">Entrar</button>
+                <p class="mb-0">
+                    <a href="/register">¿Olvidaste tu contraseña?</a>
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
