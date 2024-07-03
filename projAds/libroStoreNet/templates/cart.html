@@ -65,8 +65,9 @@
                             </div>
                             <form action="{% url 'checkout' %}">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-danger btn-block mt-3">IR A PAGAR</button>
+                                <button id="irApagar" type="submit" class="btn btn-danger btn-block mt-3">IR A PAGAR</button>
                             </form>
+
                         </div>
                     </div>
                 </div>
@@ -76,6 +77,10 @@
 </div>
 
 <script>
+    document.getElementById("irApagar").addEventListener("click", function() {
+        window.location.href = "{% url 'checkout' %}";
+    });
+
     document.addEventListener('DOMContentLoaded', function () {
         const cartItems = document.getElementById('cart-items');
         const subtotalElement = document.getElementById('subtotal');
