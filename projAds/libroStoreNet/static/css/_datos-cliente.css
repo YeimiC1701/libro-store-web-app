@@ -1,0 +1,55 @@
+h1 {
+    color: var(--colorPrimario)
+}
+
+#formulario-direccion {
+    margin-left: 30px;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    align-items: center;
+}
+
+.form-group label {
+    text-align: end;
+    margin-right: 1rem;
+}
+
+.form-control {
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid gray;
+}
+
+.form-control:focus {
+    border-bottom: 1px solid var(--colorPrimario);
+    box-shadow: 0px 2px 2px -2px var(--colorPrimario);
+}
+
+.btn-guardar {
+    background-color: var(--colorPrimario);
+    color: white;
+    border: 1px solid gray;
+    border-radius: 0;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    transition: .3s transform ease;
+}
+
+.btn-guardar:hover {
+    background-color: #B02D40;
+    transform: scale(1.1);
+    border-color: gray;
+}
+
+.box-boton {
+    display: flex;
+    justify-content: end;
+}
+
+#liveAlertPlaceholder {
+    background-color: var(--colorSecundario);
+}
