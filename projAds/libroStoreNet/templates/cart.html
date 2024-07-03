@@ -16,6 +16,7 @@
                                 <th>Libro</th>
                                 <th>Cantidad</th>
                                 <th>Importe</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody id="cart-items">
@@ -40,6 +41,9 @@
                                     <button class="btn btn-sm btn-outline-danger increase" {% if item.count >= item.max %}disabled{% endif %}>+</button>
                                 </td>
                                 <td class="price">${{ item.book.precioLibro|floatformat:2 }}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-danger delete" data-book-id="{{ item.book.id }}"><i class="fa-solid fa-trash"></i></button>
+                                </td>
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -63,7 +67,7 @@
                                 <span>Total</span>
                                 <span id="total">$0.00</span>
                             </div>
-                            <button id="irApagar" class="btn btn-danger btn-block mt-3">IR A PAGAR</button>
+                            <button class="btn btn-danger btn-block mt-3">IR A PAGAR</button>
                         </div>
                     </div>
                 </div>
@@ -73,10 +77,6 @@
 </div>
 
 <script>
-    document.getElementById("irApagar").addEventListener("click", function() {
-        window.location.href = "{% url 'checkout' %}";
-    });
-
     document.addEventListener('DOMContentLoaded', function () {
         const cartItems = document.getElementById('cart-items');
         const subtotalElement = document.getElementById('subtotal');
@@ -94,18 +94,20 @@
         }
 
         cartItems.addEventListener('click', function (event) {
+            const row = event.target.closest('tr');
+            const bookId = row.dataset.bookId;
+
             if (event.target.classList.contains('increase') || event.target.classList.contains('decrease')) {
-                const row = event.target.closest('tr');
                 const quantityElement = row.querySelector('.quantity');
                 let quantity = parseInt(quantityElement.textContent);
                 const maxQuantity = parseInt(row.dataset.bookMax);
-                
+
                 if (event.target.classList.contains('increase') && quantity < maxQuantity) {
                     quantity++;
                 } else if (event.target.classList.contains('decrease') && quantity > 1) {
                     quantity--;
                 }
-                
+
                 quantityElement.textContent = quantity;
 
                 const decreaseButton = row.querySelector('.decrease');
@@ -115,6 +117,23 @@
                 increaseButton.disabled = quantity >= maxQuantity;
 
                 updateTotal();
+            }
+
+            if (event.target.classList.contains('delete')) {
+                fetch(`/remove_from_cart/${bookId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}',
+                        'Content-Type': 'application/json'
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        row.remove();
+                        updateTotal();
+                    }
+                });
             }
         });
 

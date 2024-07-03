@@ -109,67 +109,65 @@ def historialCompras(request):
 
 # Crear la vista de registro
 def register(request):
-    if request.method == "POST":
+    if request.method == 'POST':
         print(request.POST)  # Imprimir los datos POST para debuguear
 
         # Obtener los datos del formulario
-        firstName = request.POST.get("firstName")
-        lastName = request.POST.get("lastName")
-        email = request.POST.get("email")
-        password = request.POST.get("password")
-        confirmPassword = request.POST.get("confirmPassword")
+        firstName = request.POST.get('firstName')
+        lastName = request.POST.get('lastName')
+        middleName = request.POST.get('middleName', '').strip()
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        confirmPassword = request.POST.get('confirmPassword')
 
         # Imprimir los datos para debuguear
         print(f"First Name: {firstName}")
         print(f"Last Name: {lastName}")
+        print(f"Middle Name: {middleName}")
         print(f"Email: {email}")
         print(f"Password: {password}")
         print(f"Confirm Password: {confirmPassword}")
 
         # Verificar que el correo electrónico no esté vacío
         if not email:
-            messages.error(request, "El correo electrónico es obligatorio.")
-            return redirect("register")
+            messages.error(request, 'El correo electrónico es obligatorio.')
+            return redirect('register')
 
         # Verificar que las contraseñas coincidan
         if password != confirmPassword:
-            messages.error(request, "Las contraseñas no coinciden.")
-            return redirect("register")
+            messages.error(request, 'Las contraseñas no coinciden.')
+            return redirect('register')
 
         # Verificar la validez del correo electrónico
         if not re.match(r"[^@]+@[^@]+\.[^@]+", email):
-            messages.error(request, "Correo electrónico inválido.")
-            return redirect("register")
+            messages.error(request, 'Correo electrónico inválido.')
+            return redirect('register')
 
         # Verificar si el correo electrónico ya está registrado
         if Cliente.objects.filter(emailCliente=email).exists():
-            messages.error(request, "El correo electrónico ya está registrado.")
-            return redirect("register")
+            messages.error(request, 'El correo electrónico ya está registrado.')
+            return redirect('register')
 
         # Verificar que la contraseña cumpla con los criterios
-        if not re.match(
-            r"^(?=.*[A-Z])(?=.*\d)(?=.*[\/\-\*\_])[A-Za-z\d\/\-\*\_]{8,}$", password
-        ):
-            messages.error(
-                request,
-                "La contraseña debe contener al menos 8 caracteres, una letra mayúscula, un número y un símbolo especial (/, -, *, _).",
-            )
-            return redirect("register")
+        if not re.match(r'^(?=.*[A-Z])(?=.*\d)(?=.*[\/\-\*\_])[A-Za-z\d\/\-\*\_]{8,}$', password):
+            messages.error(request, 'La contraseña debe contener al menos 8 caracteres, una letra mayúscula, un número y un símbolo especial (/, -, *, _).')
+            return redirect('register')
 
         # Crear un nuevo cliente y guardar en la base de datos
         cliente = Cliente(
             nombresCliente=firstName,
             apellidoPaternoCliente=lastName,
+            apellidoMaternoCliente=middleName if middleName else None,
             emailCliente=email,
             contraseniaCliente=make_password(password),
-            estatusCliente="a",  # Activo
+            estatusCliente='a'  # Activo
         )
         cliente.save()
-        messages.success(request, "Registro exitoso. Ya puedes iniciar sesión.")
-        return redirect("login")
+        messages.success(request, 'Registro exitoso. Ya puedes iniciar sesión.')
+        return redirect('login')
 
     # Renderizar la página de registro
-    return render(request, "CrearCuenta.html")
+    return render(request, 'CrearCuenta.html')
 
 
 # Crear la vista de inicio de sesión
@@ -229,13 +227,34 @@ def cart(request):
 """
 
 
+@csrf_exempt
+def remove_from_cart(request, book_id):
+    if request.method == 'POST':
+        # Retrieve the cart items from the session or create an empty list if not found
+        cart_items = request.session.get('cart_items', [])
+        
+        # Remove the book ID from the cart items
+        if book_id in cart_items:
+            cart_items = [item for item in cart_items if item != book_id]
+        
+        # Save the updated cart items back to the session
+        request.session['cart_items'] = cart_items
+        
+        # Respond with a success message
+        return JsonResponse({'success': True})
+    
+    return JsonResponse({'success': False})
+
 def cart(request):
     # Leer los elementos guardados en el carrito
-    book_ids = request.session.get(
-        "cart_items", []
-    )  # Default to an empty list if not found
+    book_ids = request.session.get('cart_items', [])  # Default to an empty list if not found
 
-    # Conteo de ocurrencias de cad ID individual
+    # Verificar si el carrito está vacío
+    if not book_ids:
+        messages.info(request, 'Tu bolsa está vacía.')
+        return redirect('/')  # Redirigir a la página principal (lista de libros)
+
+    # Conteo de ocurrencias de cada ID individual
     book_counts = Counter(book_ids)
 
     # Buscar los libros en la DB basado en el ID
@@ -244,49 +263,39 @@ def cart(request):
     # Crear una lista con los datos de cada libro
     book_details = []
     for book in books:
-        book_details.append(
-            {
-                "book": book,
-                "count": book_counts[book.id],
-                "available": book.stockLibro > 0,
-                "max": book.stockLibro,
-            }
-        )
+        book_details.append({
+            'book': book,
+            'count': book_counts[book.id],
+            'available': book.stockLibro > 0,
+            'max': book.stockLibro
+        })
 
     # Pasar la información de los libros a la plantilla
-    return render(request, "cart.html", {"book_details": book_details})
-
+    return render(request, 'cart.html', {'book_details': book_details})
 
 @csrf_exempt
 def add_to_cart(request, book_id):
-    if request.method == "POST":
+    if request.method == 'POST':
         # Retrieve the cart items from the session or create an empty list if not found
-        cart_items = request.session.get("cart_items", [])
-
+        cart_items = request.session.get('cart_items', [])
+        
         # Add the new book ID to the cart items
         cart_items.append(book_id)
-
+        
         # Save the updated cart items back to the session
-        request.session["cart_items"] = cart_items
-
+        request.session['cart_items'] = cart_items
+        
         # Respond with a success message
-        return JsonResponse({"success": True})
-
-    return JsonResponse({"success": False})
-
+        return JsonResponse({'success': True})
+    
+    return JsonResponse({'success': False})
 
 def clear_cart(request):
     # Clear the cart items from the session
-    request.session["cart_items"] = []
-
+    request.session['cart_items'] = []
+    
     # Redirect to the cart page or any other appropriate page
-    return redirect("cart")
-
-
-def book_list(request):
-    books = Libro.objects.all()  # Fetch all books from the database
-    return render(request, "book_list.html", {"books": books})
-
+    return redirect('cart')
 
 # Implementación de vistas de Abraham
 def verDatos(request):
