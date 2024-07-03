@@ -50,6 +50,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+LOGIN_URL = '/login/'  # Adjusta la URL de inicio de sesión
+
 ROOT_URLCONF = 'projAds.urls'
 
 TEMPLATES = [
@@ -63,6 +65,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'libroStoreNet.context_processors.user_info', #Context processor for user info
             ],
         },
     },
