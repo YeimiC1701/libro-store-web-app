@@ -407,8 +407,7 @@ def editarDireccion(request):
             nuevaDireccion.estadoDomicilio = estado
             nuevaDireccion.save()
 
-    return redirect("/direccion/")
-
+    return redirect('/direccion/')
 
 def catalogo(request):
     query = request.GET.get("q", "")
@@ -438,3 +437,46 @@ def catalogo(request):
 def libroDetalle(request, pk):
     libro = get_object_or_404(Libro.objects.prefetch_related("autores"), pk=pk)
     return render(request, "libroDetalle.html", {"libro": libro})
+
+def checkout(request):
+    # redirigir a login si no ha sesion abierta
+    if 'cliente_id' not in request.session:
+        return redirect('login')
+    
+    # Datos del cliente
+    idUsuario = request.session.get('cliente_id')
+    usuario = Cliente.objects.get(id = idUsuario)
+    domicilio = Domicilio.objects.select_related('cliente').filter(cliente = usuario)
+    domicilio = domicilio.first()
+
+    # Simulación de un pedido
+    libros = Libro.objects.all().order_by('stockLibro')[:4]
+    
+    # Crear los items del pedido
+    items_pedido = []
+    conteo_libros = Counter(libros)
+    for libro in libros:
+        item = {
+            'libro': libro,
+            'cantidad': 1,  # Asumiendo 1 por simplicidad, ajusta según sea necesario
+            'precio': libro.precioLibro,
+            'subtotal': libro.precioLibro * 1,  # Asumiendo 1 por simplicidad, ajusta según sea necesario
+        }
+        items_pedido.append(item)
+    
+    # Calcular el total
+    total = sum(item['precio'] for item in items_pedido)
+    
+    # Construir el pedido
+    pedido = {
+        'items': items_pedido,
+        'total': total,
+    }
+    
+    data = {
+        'direccion': domicilio,
+        'usuario': usuario,
+        'pedido': pedido,
+    }
+
+    return render(request, "checkout.html", data)

@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+
+{% block title %} Historial de compras {% endblock %}
+
+{% block content %}
+{% load static %}
+
+<style>
+    .formulario-tarjeta {
+        /* visibility: hidden; */
+    }
+
+    .box-boton {
+        margin-top: 20px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .box-boton button {
+        background-color: var(--colorPrimario);
+        border-radius: 0;
+        border: 1px solid gray;
+    }
+
+    .form-control {
+        border: none;
+        border-radius: 0;
+        border-bottom: 1px solid gray;
+    }
+
+    .form-group label {
+        text-align: end;
+        margin-right: 5rem;
+    }   
+
+</style>
+
+<div class="row ms-5">
+    <div class="col-9">
+
+        <h1><i>Resumen de tu pedido</i></h1>
+
+        <div class="envio">
+
+            <h3>Informaci&oacute;n para el env&iacute;o</h3>
+            <p>{{ usuario.nombresCliente }} {{usuario.apellidoPaternoCliente}} </p>
+            <p>{{ direccion.calleDomicilio }}</p>
+
+        </div>
+        
+        <div class="articulos">
+
+            <h3>Art&iacute;culos</h3>
+            <table class="table table-striped">
+                
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Titulo</th>
+                        <th class="text-center">Cantidad</th>
+                        <th class="text-end">Precio</th>
+                        <th class="text-end">Subtotal</th>
+                    </tr>
+                </thead>
+                
+                <tbody>
+                    
+                    {% for item in pedido.items %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ item.libro.tituloLibro }}</td>
+                        <td class="text-center">{{ item.cantidad }}</td>
+                        <td class="text-end">${{ item.precio }}</td>
+                        <td class="text-end">${{ item.subtotal }}</td>
+                    </tr>
+                    {% endfor %}
+                    
+                    <tr>
+                        <td colspan="4" class="text-end">ENVIO</td>
+                        <td class="text-end">$0</td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="4" class="text-end">TOTAL</td>
+                        <td class="text-end">${{ pedido.total }}</td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <div class="box-boton">
+            <button type="submit" class="btn btn-primary btn-guardar"
+             onclick="changeVisibility()"
+            >PROCEDER CON EL PAGO</button>
+        </div>
+
+        <dv class="formulario-tarjeta mt-5 row" id="formulario-tarjeta" >
+            <h3>Tarjeta: </h3>
+            <!-- FALTA POR IMPLEMENTAR LA FUNCIOANLIDAD DE FINALIZAR COMRA -->
+            <!-- <form action="{% comment %}{% url 'finalizarCompra' %}"> {% endcomment %}-->
+            <form action="#">
+                <div class="row g-3 mt-2 align-items-center">
+                    <div class="col-auto">
+                        <label for="numeroTarjeta" class="form-label">Numero de tarjeta</label>
+                    </div>
+                    <div class="col-auto">
+                        <input type="text" name="numeroTarjeta" class="form-control" placeholder="Numero de tarjeta" 
+                        minlength="16" maxlength="16" required>
+                    </div>
+                </div>
+
+                <div class="row g-3 mt-2 align-items-center">
+                    <div class="col-auto">
+                        <label for="nombreTarjeta" class="form-label">Nombre del titular</label>
+                    </div>
+                    <div class="col-auto">
+                        <input type="text" name="nombreTarjeta" class="form-control" placeholder="Nombre del titular"
+                        minlength="3" maxlength="60">
+                    </div>
+                </div>
+
+                <div class="row g-3 mt-2 align-items-center">
+                    <div class="col-auto">
+                        <label for="fechaExpiracion" class="form-label">Fecha de expiracion</label>
+                    </div>
+                    <div class="col-auto">
+                        <input type="text" name="fechaExpiracion" class="form-control" placeholder="Fecha de expiracion">
+                    </div>
+                </div>
+                
+                <div class="row g-3 mt-2 align-items-center">
+                    <div class="col-auto">
+                        <label for="codigoSeguridad" class="form-label">Codigo de seguridad</label>
+                    </div>
+                    <div class="col-auto">
+                        <input type="number" name="codigoSeguridad" class="form-control" placeholder="Codigo de seguridad"
+                        min="100" max="999" required step="any">
+                    </div>    
+                </div>
+
+                <div class="box-boton mt-4">
+                    <button type="submit" class="btn btn-primary btn-guardar btn-lg"
+                    >PAGAR</button>
+                </div>
+            </form>
+        </dv>
+        
+
+    </div>
+</div>
+
+<script>
+  function changeVisibility() {
+  document.getElementById("formulario-tarjeta").style.visibility = "visible";
+}
+</script>
+{% endblock %}
