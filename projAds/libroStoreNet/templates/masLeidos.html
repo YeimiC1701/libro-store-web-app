@@ -6,9 +6,7 @@
 
     <div class="carrusel-list" id="carrusel-list">
 
-        <button class="carrusel-arrow carrusel-prev" id="button-prev" data-button="button-prev"
-            onclick="app.processingButton(event)">
-            <!-- onclick=" moveLeft()"> -->
+        <button class="carrusel-arrow carrusel-prev" id="button-prev" data-button="button-prev" onclick="app.processingButton(event)">
             <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-left"
                 class="svg-inline--fa fa-chevron-left fa-w-10" role="img" xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 320 512">
@@ -19,15 +17,9 @@
         </button>
         
         <div class="carrusel-track" id="track">
-            
             {% for libro in librosMasLeidos %}
             <div class="carrusel">
-                
                 <div>
-                    {% comment %} 
-                    <!-- Aqui se redirige a la plantilla de un libro por su id -->
-                    <a href="libro/{{libro.id}}"> 
-                    {% endcomment %}
                     <a href="#">
                         <picture>
                             <img src="{{ libro.portadaLibro.url }}" alt="Portada del libro">
@@ -40,18 +32,13 @@
                 </div>
                 <p class="precio"> ${{libro.precioLibro}} </p>
                 <div>
-                    <button id="button1" type="button" class="btn btn-primary">Añadir a bolsa</button>
+                    <button id="button-{{ libro.id }}" type="button" class="btn btn-primary add-to-cart-btn" data-id="{{ libro.id }}">Añadir a bolsa</button>
                 </div>
-                
             </div>
             {% endfor %}
-            
         </div>
         
-
-        <button class="carrusel-arrow carrusel-next" id="button-next" data-button="button-next"
-            onclick="app.processingButton(event)">
-            <!-- onclick="app. moveRight()"> -->
+        <button class="carrusel-arrow carrusel-next" id="button-next" data-button="button-next" onclick="app.processingButton(event)">
             <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="chevron-right"
                 class="svg-inline--fa fa-chevron-right fa-w-10" role="img" xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 320 512">
@@ -61,6 +48,40 @@
             </svg>
         </button> 
     </div>
-
 </div>
-<script src = "{% static 'js/carrusel.js' %}"></script>
+
+<script src="{% static 'js/carrusel.js' %}"></script>
+<!-- <script src="{% static 'js/agregarCarrito.js' %}"></script> -->
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get all add-to-cart buttons
+    const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+
+    addToCartButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const bookId = this.getAttribute('data-id');
+            addToCart(bookId);
+        });
+    });
+
+    function addToCart(bookId) {
+        fetch('{% url "add_to_cart" 0 %}'.replace('/0/', `/${bookId}/`), {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({ book_id: bookId })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Book added to cart successfully');
+            } else {
+                alert('Failed to add book to cart');
+            }
+        });
+    }
+});
+</script>
