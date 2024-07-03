@@ -21,9 +21,15 @@
         <p class="card-title">{{autor.autor}}</p>
         {% endfor %}
         <p class="card-text">Precio: {{ libro.precioLibro }}</p>
+        {% if libro.stockLibro > 0 %}
         <div>
           <button type="button" class="btn add-to-bolsa-btn" style="background-color: var(--colorPrimario); color:white" libro-id="{{ libro.id }}">Añadir a bolsa</button>
         </div>
+        {% else %}
+        <div>
+          <button type="button" class="btn btn-secondary" disabled>Sin Stock</button>
+        </div>
+        {% endif %}
       </div>
     </div>
   </div>
