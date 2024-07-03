@@ -67,7 +67,11 @@
                                 <span>Total</span>
                                 <span id="total">$0.00</span>
                             </div>
-                            <button class="btn btn-danger btn-block mt-3">IR A PAGAR</button>
+                            <form action="{% url 'checkout' %}">
+                                {% csrf_token %}
+                                <button id="irApagar" type="submit" class="btn btn-danger btn-block mt-3">IR A PAGAR</button>
+                            </form>
+
                         </div>
                     </div>
                 </div>

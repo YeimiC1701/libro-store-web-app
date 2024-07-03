@@ -466,7 +466,6 @@ def checkout(request):
 
     # Crear los items del pedido
     items_pedido = []
-    print('Libros ennnnnnnnnn pedido', conteo_libros)
     for libro in libros:
         cantidad = conteo_libros[libro.id]
         item = {
@@ -495,13 +494,49 @@ def checkout(request):
     return render(request, "checkout.html", data)
 
 
-# def finalizarCompra(request):
-#     if request.method == 'POST':
-#         # Datos del cliente
-#         idUsuario = request.session.get('cliente_id')
-#         usuario = Cliente.objects.get(id = idUsuario)
+def finalizarCompra(request):
+    if request.method == 'POST':
+        # Datos del cliente
+        idUsuario = request.session.get('cliente_id')
+        usuario = Cliente.objects.get(id=idUsuario)
         
-#         # Retrieve the cart items from the session or create an empty list if not found
-#         cart_items = request.session.get("cart_items", [])
+        # Recuperar los ítems del carrito de la sesión
+        cart_items = request.session.get("cart_items", [])
+        idLibros = Counter(cart_items)
 
-#     return redirect('historial')
+        libros = Libro.objects.filter(id__in=idLibros.keys())
+
+        # Crear los ítems del pedido
+        items_pedido = []
+        total = 0
+        for libro in libros:
+            cantidad = idLibros[libro.id]
+            subtotal = libro.precioLibro * cantidad
+            total += subtotal
+            items_pedido.append({
+                'libro': libro,
+                'cantidad': cantidad,
+                'precio': libro.precioLibro,
+                'subtotal': subtotal,
+            })
+        
+        # Crear la transacción
+        transaccion = Transaccion(
+            totalTransaccion=total,
+            tipoTransaccion=TipoTransaccion.objects.get(id=4),
+            cliente=usuario,
+        )
+        transaccion.save()
+
+        # Para cada libro en la transacción, crear y guardar una instancia de TransaccionInterLibro
+        for item in items_pedido:
+            TransaccionInterLibro(
+                idTransaccion=transaccion,
+                idLibro=item['libro'],
+                precio=item['precio'],
+                piezas=item['cantidad']
+            ).save()
+
+        request.session['cart_items'] = []
+
+    return redirect('historial')
