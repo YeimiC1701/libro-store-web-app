@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %} Historial de compras {% endblock %}
+
+{% block content %}
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'css/all.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/_direccion.css' %}">
+<link rel="stylesheet" href="{% static 'css/fontawesome.min.css' %}">
+
+<h1><i>Editar direcci&oacute;n</i></h1>
+
+<div>
+    <form id="formulario-direccion" action="{% url 'editarDireccion' %}" method="POST">
+        {% csrf_token %}
+
+        <input type="hidden" name="idDireccion" value="{{direccion.id}}">
+
+        <div class="form-group">
+            <label for="calle">Calle</label>
+            <input type="text" class="form-control" name="calle" id="calle"
+            value="{{ direccion.calleDomicilio }}" maxlength="50" minlength="3" 
+            placeholder="Ingresa la calle de tu domicilio" required>
+        </div>
+
+        <div class="form-group">
+            <label for="numero">Numero</label>
+            <input type="text" class="form-control" name="numero" id="numero"
+            value="{{ direccion.numeroExteriorDomicilio }}" maxlength="10" minlength="1"
+            placeholder="Ingresa el numero exterior de tu domicilio" required>
+        </div>
+
+        <div class="form-group">
+            <label for="colonia">Colonia</label>
+            <input type="text" class="form-control" name="colonia" id="colonia"
+            maxlength="50" minlength="3" 
+            value="{{ direccion.coloniaDomicilio }}" 
+            placeholder="Ingresa la colonia de tu domicilio" required>
+        </div>
+
+        <div class="form-group">
+            <label for="codigoPostal">Codigo Postal</label>
+            <input type="text" class="form-control" name="codigoPostal" id="codigoPostal"
+            pattern="[0-9]{5}" title="El codigo postal debe contener 5 digitos"
+            value="{{ direccion.codigoPostalDomicilio }}"
+            placeholder="Ingresa el codigo postal de tu domicilio" required>
+        </div>
+
+        <div class="form-group">
+            <label for="delMnpio">Delegacion/Municipio</label>
+            <input type="text" class="form-control" maxlength="50" minlength="3"
+            name="delMnpio" id="delMnpio" value="{{ direccion.municipioDomicilio }}" 
+            placeholder="Ingresa la delegacion o municipio de tu domicilio" required>
+        </div>
+
+        <div class="form-group">
+            <label for="estado">Estado</label>
+            <input type="text" class="form-control" name="estado" id="estado"
+            maxlength="50" minlength="3"
+            value="{{ direccion.estadoDomicilio }}" 
+            placeholder="Ingresa el estado de tu domicilio" required>
+        </div>
+
+        <div id="liveAlertPlaceholder"></div>
+        <div>
+            <button type="submit" class="btn btn-primary btn-guardar" id="liveAlertBtn">Guardar</button>
+        </div>
+
+    </form>    
+</div>
+<script src="{% static 'js/direccion.js' %}"></script>
+
+{% endblock %}

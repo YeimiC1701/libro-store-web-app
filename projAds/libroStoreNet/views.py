@@ -313,3 +313,39 @@ def editarDatos(request):
 
     return redirect('/datos/')
 
+
+def verDireccion(request):
+    idUsuario = request.session.get('cliente_id')
+    usuario = Cliente.objects.get(id = idUsuario)
+    domicilio = Domicilio.objects.select_related('cliente').filter(cliente = usuario)
+    domicilio = domicilio.first()
+    # print("Domicilio: ", domicilio.estadoDomicilio)
+    print("Usuario en domicilio: ", usuario)
+    
+    data = {
+        'direccion': domicilio,
+    }
+
+    return render(request, "direccion.html", data)
+
+
+def editarDireccion(request):
+    if request.method == 'POST':
+        idDireccion = int(request.POST.get('idDireccion'))
+        calle = request.POST.get('calle').strip().title()
+        numero = request.POST.get('numero').strip().title()
+        colonia = request.POST.get('colonia').strip().title()
+        codigoPostal = request.POST.get('codigoPostal').strip().title()
+        delMnpio = request.POST.get('delMnpio').strip().title()
+        estado = request.POST.get('estado').strip().title()
+
+        nuevaDireccion = Domicilio.objects.get(id = idDireccion)
+        nuevaDireccion.calleDomicilio = calle
+        nuevaDireccion.numeroExteriorDomicilio = numero
+        nuevaDireccion.coloniaDomicilio = colonia
+        nuevaDireccion.codigoPostalDomicilio = codigoPostal
+        nuevaDireccion.municipioDomicilio = delMnpio
+        nuevaDireccion.estadoDomicilio = estado
+        nuevaDireccion.save()
+
+    return redirect('/direccion/')
